@@ -29,6 +29,8 @@ rtusrgp=$(groups $rtusr | cut -d' ' -f 1)
 installdir=/Users/$rtusr/bin/MacPorts
 xccli=/Library/Developer/CommandLineTools
 updtr=macports_updater.sh
+mpdltgt=v2.8.1-13-Ventura.pkg
+mppgk=MacPorts-2.8.1-13-Ventura.pkg
 
 # Check for and change to MacPorts dir:
 if [ ! -d $installdir ]; then
@@ -44,25 +46,24 @@ fi
 # Install the latest version of the Xcode command-line tools:
 echo "Checking for Xcode CLI tools..."
 if [ -d $xccli ]; then
-    softwareupdate --history
     rm -rf $xccli
-else
-    echo "Installing the latest version of Xcode CLI tools..."
-    xcode-select --install
-    xcodebuild -license
-    echo "Done."
 fi
+
+echo "Installing the latest version of Xcode CLI tools..."
+xcode-select --install
+read -p "Press any key to resume after Xcode CLI tools installation completes."
+xcodebuild -license
+echo "Done."
 
 # Reinstall MacPorts base system:
 echo "Reinstalling the MacPorts base system..."
-curl --location --remote-name \
-    https://github.com/macports/macports-base/releases/download/v2.8.0/\
-        MacPorts-2.8.0-13-Ventura.pkg
-sudo installer -pkg MacPorts-2.8.0-13-Ventura.pkg -target /
+curl --location --remote-name https://github.com/macports/macports-base/releases/download/$mpdltgt
+sudo installer -pkg $mppkg -target /
 echo "Done."
 
 # Uninstall your old ports:
 echo "Uninstalling your old ports..."
+rm myports.txt requested.txt
 port -qv installed > myports.txt
 port echo requested | cut -d ' ' -f 1 | uniq > requested.txt
 sudo port -f uninstall installed
@@ -71,8 +72,8 @@ echo "Done."
 
 # Install your new ports:
 echo "Installing your new ports"
-curl --location --remote-name https://github.com/macports/macports-contrib/\
-    raw/master/restore_ports/restore_ports.tcl
+rm restore_ports.tcl
+curl --location --remote-name https://github.com/macports/macports-contrib/raw/master/restore_ports/restore_ports.tcl
 chmod +x restore_ports.tcl
 xattr -d com.apple.quarantine restore_ports.tcl
 sudo ./restore_ports.tcl myports.txt
@@ -91,7 +92,7 @@ else
     echo "#! /bin/sh" > $updtr
     echo >> $updtr
     echo "# macports_updater.sh" >> $updtr
-    echo "# Hoyt Harness, 2023" >> $updtr
+    echo "# Hoyt Harness, Positronikal, 2023" >> $updtr
     echo "#" >> $updtr
     echo "# A shell script for macOS to update an existing MacPorts installation," >> $updtr
     echo "# including ports." >> $updtr
@@ -117,8 +118,8 @@ else
     echo "sudo port uninstall rleaves" >> $updtr
     echo >> $updtr
     echo "exit" >> $updtr
-    echo "New MacPorts update script created. Run macports_updater.sh as root from terminal."
 fi
+    echo "New MacPorts update script created. Run macports_updater.sh as root from terminal."
 
 echo "MacPorts upgrade complete."
 

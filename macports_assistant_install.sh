@@ -27,6 +27,8 @@
 rtusr=$(logname 2>/dev/null || echo $SUDO_USER)
 rtusrgp=$(groups $rtusr | cut -d' ' -f 1)
 updtr=macports_updater.sh
+mpdltgt=v2.8.1-13-Ventura.pkg
+mppgk=MacPorts-2.8.1-13-Ventura.pkg
 
 # Create MacPorts dir and set ~/bin path envar:
 echo "Preparing your MacPorts directory..."
@@ -36,23 +38,26 @@ PATH="/Users/$rtusr/bin/MacPorts${PATH:+:$PATH}"
 echo "Changed working directory to: /Users/$rtusr/bin/MacPorts"
 
 # Install the latest version of the Xcode command-line tools:
+echo "Checking for Xcode CLI tools..."
+if [ -d $xccli ]; then
+    rm -rf $xccli
+fi
+
 echo "Installing the latest version of Xcode CLI tools..."
 xcode-select --install
+read -p "Press any key to resume after Xcode CLI tools installation completes."
 xcodebuild -license
 echo "Done."
 
 # Install MacPorts base system:
 echo "Installing the MacPorts base system..."
-curl --location --remote-name \
-    https://github.com/macports/macports-base/releases/tag/v2.8.0/\
-        MacPorts-2.8.0-13-Ventura.pkg
-sudo installer -pkg MacPorts-2.8.0-13-Ventura.pkg -target /
+curl --location --remote-name https://github.com/macports/macports-base/releases/download/$mpdltgt
+sudo installer -pkg $mppkg -target /
 echo "Done."
 
 # Install your new ports:
 echo "Installing your new ports"
-curl --location --remote-name https://github.com/macports/macports-contrib/\
-    raw/master/restore_ports/restore_ports.tcl
+curl --location --remote-name https://github.com/macports/macports-contrib/raw/master/restore_ports/restore_ports.tcl
 chmod +x restore_ports.tcl
 xattr -d com.apple.quarantine restore_ports.tcl
 sudo ./restore_ports.tcl myports.txt
@@ -87,7 +92,7 @@ echo "# GNU General Public License for more details." >> $updtr
 echo "#" >> $updtr
 echo "# You should have received a copy of the GNU General Public License" >> $updtr
 echo "# along with this program.  If not, see <http://www.gnu.org/licenses/>." >> $updtr
-echo >> macports_updater.sh >> $updtr
+echo >> $updtr >> $updtr
 echo "sudo port -v selfupdate" >> $updtr
 echo "sudo port upgrade outdated" >> $updtr
 echo "sudo port uninstall inactive" >> $updtr
@@ -95,6 +100,8 @@ echo "sudo port uninstall rleaves" >> $updtr
 echo >> $updtr
 echo "exit" >> $updtr
 echo "MacPorts update script created. Run macports_updater.sh as root from terminal."
+
+echo "MacPortsinstallation complete."
 
 read -p "Press any key to exit..."
 
