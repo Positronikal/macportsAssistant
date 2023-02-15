@@ -12,14 +12,30 @@ Unzip the macportsAssistant download or navigate to the cloned
 directory, depending on how you obtained the files from Github. Copy
 either the install or upgrade script, since you only need one or the
 other, to the directory on your Mac from which you intend to run it.
+
+Edit either the script you copied and change the MacPorts download
+target (mpdl) and MacPorts package (mppkg) variables to reflect correct
+values for your installation. Here is the package repo URL needed to
+determine the correct values:
+
+    https://github.com/macports/macports-base/releases
+
+Edit mpdl with the correct download path, i.e.:
+
+    https://github.com/macports/macports-base/releases/download/v2.8.1/MacPorts-2.8.1-13-Ventura.pkg
+
+And edit mppkg with the correct package name, i.e.:
+
+    MacPorts-2.8.1-13-Ventura.pkg
+
 You will need to use sudo, so run either:
 
-$ sudo macports_assistant_install.sh
+    $ sudo macports_assistant_install.sh
 
 ...or if you already have a version of MacPorts for a previous macOS
 version...
 
-$ sudo macports_assistant_upgrade.sh
+    $ sudo macports_assistant_upgrade.sh
 
 Once either completes, you'll have a ~/bin/MacPorts directory with an
 update utility in the ~/bin directory. This directory will also be

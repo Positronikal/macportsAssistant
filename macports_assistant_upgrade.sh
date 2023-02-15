@@ -29,8 +29,8 @@ rtusrgp=$(groups $rtusr | cut -d' ' -f 1)
 installdir=/Users/$rtusr/bin/MacPorts
 xccli=/Library/Developer/CommandLineTools
 updtr=macports_updater.sh
-mpdltgt=v2.8.1-13-Ventura.pkg
-mppgk=MacPorts-2.8.1-13-Ventura.pkg
+mpdl=https://github.com/macports/macports-base/releases/download/v2.8.1/MacPorts-2.8.1-13-Ventura.pkg
+mppkg=MacPorts-2.8.1-13-Ventura.pkg
 
 # Check for and change to MacPorts dir:
 if [ ! -d $installdir ]; then
@@ -40,6 +40,7 @@ if [ ! -d $installdir ]; then
     exit
 else
     cd /Users/$rtusr/bin/MacPorts
+PATH="/Users/$rtusr/bin/MacPorts${PATH:+:$PATH}"
     echo "Changed working directory to: /Users/$rtusr/bin/MacPorts"
 fi
 
@@ -57,7 +58,7 @@ echo "Done."
 
 # Reinstall MacPorts base system:
 echo "Reinstalling the MacPorts base system..."
-curl --location --remote-name https://github.com/macports/macports-base/releases/download/$mpdltgt
+curl --location --remote-name $mpdl
 sudo installer -pkg $mppkg -target /
 echo "Done."
 

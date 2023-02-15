@@ -27,8 +27,8 @@
 rtusr=$(logname 2>/dev/null || echo $SUDO_USER)
 rtusrgp=$(groups $rtusr | cut -d' ' -f 1)
 updtr=macports_updater.sh
-mpdltgt=v2.8.1-13-Ventura.pkg
-mppgk=MacPorts-2.8.1-13-Ventura.pkg
+mpdl=https://github.com/macports/macports-base/releases/download/v2.8.1/MacPorts-2.8.1-13-Ventura.pkg
+mppkg=MacPorts-2.8.1-13-Ventura.pkg
 
 # Create MacPorts dir and set ~/bin path envar:
 echo "Preparing your MacPorts directory..."
@@ -51,7 +51,7 @@ echo "Done."
 
 # Install MacPorts base system:
 echo "Installing the MacPorts base system..."
-curl --location --remote-name https://github.com/macports/macports-base/releases/download/$mpdltgt
+curl --location --remote-name $mpdl
 sudo installer -pkg $mppkg -target /
 echo "Done."
 
