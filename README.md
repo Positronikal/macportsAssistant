@@ -1,7 +1,7 @@
 # macportsAssistant
 
 ## Description and Version Information
-These shell utilities work on Macintosh macOS 13 Ventura and later to either automate the installation of MacPorts, upgrade MacPorts if an installation for an earlier version of macOS exists, or update the current macPorts version if it was installed using **macportsAssistant**. See the file [VERSION](VERSION) in this directory for version information.
+These shell utilities work on Macintosh macOS 10.12 Sierra through macOS 14 Sonoma to either automate the installation of MacPorts, upgrade MacPorts if an installation for an earlier version of macOS exists, or update the current macPorts version if it was installed using **macportsAssistant**. See the file [VERSION](VERSION) in this directory for version information.
 
 ## Usage Instructions
 Both the installation and upgrade utilities must be ran as root and will create a `~/bin/MacPorts` directory to work from and add it to your path envars. In addition, they install a third utility to automate MacPorts updating (`macports_updater.sh`) which must also be ran as root. See the file [USING](USING) in this directory for basic usage instructions.

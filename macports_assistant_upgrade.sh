@@ -29,8 +29,6 @@ rtusrgp=$(groups $rtusr | cut -d' ' -f 1)
 installdir=/Users/$rtusr/bin/MacPorts
 xccli=/Library/Developer/CommandLineTools
 updtr=macports_updater.sh
-mpdl=https://github.com/macports/macports-base/releases/download/v2.8.1/MacPorts-2.8.1-13-Ventura.pkg
-mppkg=MacPorts-2.8.1-13-Ventura.pkg
 
 # Check for and change to MacPorts dir:
 if [ ! -d $installdir ]; then
@@ -45,10 +43,8 @@ PATH="/Users/$rtusr/bin/MacPorts${PATH:+:$PATH}"
 fi
 
 # Install the latest version of the Xcode command-line tools:
-echo "Checking for Xcode CLI tools..."
-if [ -d $xccli ]; then
-    rm -rf $xccli
-fi
+echo "Removing existing Xcode CLI tools..."
+rm -rf /Library/Developer/CommandLineTools
 
 echo "Installing the latest version of Xcode CLI tools..."
 xcode-select --install
@@ -57,10 +53,60 @@ xcodebuild -license
 echo "Done."
 
 # Reinstall MacPorts base system:
-echo "Reinstalling the MacPorts base system..."
-curl --location --remote-name $mpdl
-sudo installer -pkg $mppkg -target /
-echo "Done."
+case $osvers in
+    14*)
+        echo "Installing the MacPorts base system for Sonoma..."
+        curl --location --remote-name https://github.com/macports/macports-base/releases/download/v2.8.1/MacPorts-2.8.1-14-Sonoma.pkg
+        sudo installer -pkg MacPorts-2.8.1-14-Sonoma.pkg -target /
+        echo "Done."
+        ;;
+    13*)
+        echo "Installing the MacPorts base system for Ventura..."
+        curl --location --remote-name https://github.com/macports/macports-base/releases/download/v2.8.1/MacPorts-2.8.1-13-Ventura.pkg
+        sudo installer -pkg MacPorts-2.8.1-13-Ventura.pkg -target /
+        echo "Done."
+        ;;
+    12*)
+        echo "Installing the MacPorts base system for Monterey..."
+        curl --location --remote-name https://github.com/macports/macports-base/releases/download/v2.8.1/MacPorts-2.8.1-12-Monterey.pkg
+        sudo installer -pkg MacPorts-2.8.1-12-Monterey.pkg -target /
+        echo "Done."
+        ;;
+    11*)
+        echo "Installing the MacPorts base system for Big Sur..."
+        curl --location --remote-name https://github.com/macports/macports-base/releases/download/v2.8.1/MacPorts-2.8.1-11-BigSur.pkg
+        sudo installer -pkg MacPorts-2.8.1-11-BigSur.pkg -target /
+        echo "Done."
+        ;;
+    10.15*)
+        echo "Installing the MacPorts base system for Catalina..."
+        curl --location --remote-name https://github.com/macports/macports-base/releases/download/v2.8.1/MacPorts-2.8.1-10.15-Catalina.pkg
+        sudo installer -pkg MacPorts-2.8.1-10.15-Catalina.pkg -target /
+        echo "Done."
+        ;;
+    10.14*)
+        echo "Installing the MacPorts base system for Mojave..."
+        curl --location --remote-name https://github.com/macports/macports-base/releases/download/v2.8.1/MacPorts-2.8.1-10.14-Mojave.pkg
+        sudo installer -pkg MacPorts-2.8.1-10.14-Mojave.pkg -target /
+        echo "Done."
+        ;;
+    10.13*)
+        echo "Installing the MacPorts base system for High Sierra..."
+        curl --location --remote-name https://github.com/macports/macports-base/releases/download/v2.8.1/MacPorts-2.8.1-10.13-HighSierra.pkg
+        sudo installer -pkg MacPorts-2.8.1-10.13-HighSierra.pkg -target /
+        echo "Done."
+        ;;
+    10.12*)
+        echo "Installing the MacPorts base system for Sierra..."
+        curl --location --remote-name https://github.com/macports/macports-base/releases/download/v2.8.1/MacPorts-2.8.1-10.12-Sierra.pkg
+        sudo installer -pkg MacPorts-2.8.1-10.12-Sierra.pkg -target /
+        echo "Done."
+        ;;
+    *)
+        echo "This version of macOS is not supported... exiting."
+        read -p "Press any key to exit..."
+        exit
+        ;;
 
 # Uninstall your old ports:
 echo "Uninstalling your old ports..."
