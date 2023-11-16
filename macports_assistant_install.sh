@@ -3,8 +3,8 @@
 # macports_assistant_install.sh
 # Hoyt Harness, 2023
 #
-# A shell script for macOS 13 Ventura and later to automate the
-# installation of MacPorts.
+# A shell script for macOS 10.14 thru 14 to automate the installation
+# of MacPorts.
 #
 # Copyright (C) 2023 Hoyt Harness, hoyt.harness@gmail.com, Positronikal
 #
@@ -26,6 +26,7 @@
 # Variables
 rtusr=$(logname 2>/dev/null || echo $SUDO_USER)
 rtusrgp=$(groups $rtusr | cut -d' ' -f 1)
+xcgui=/Applications/Xcode.app
 osvers=$(system_profiler SPSoftwareDataType | grep "System Version" | awk '{print $6}')
 updtr=macports_updater.sh
 
@@ -43,7 +44,9 @@ rm -rf /Library/Developer/CommandLineTools
 echo "Installing the latest version of Xcode CLI tools..."
 xcode-select --install
 read -p "Press any key to resume after Xcode CLI tools installation completes."
-xcodebuild -license
+if [ -d $xcgui ]; then
+	xcodebuild -license
+fi
 echo "Done."
 
 # Install MacPorts base system:
@@ -101,6 +104,7 @@ case $osvers in
         read -p "Press any key to exit..."
         exit
         ;;
+esac
 
 # Install your new ports:
 echo "Installing your new ports"

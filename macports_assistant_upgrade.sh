@@ -25,9 +25,10 @@
 
 # Variables
 rtusr=$(logname 2>/dev/null || echo $SUDO_USER)
-rtusrgp=$(groups $rtusr | cut -d' ' -f 1)
 installdir=/Users/$rtusr/bin/MacPorts
-xccli=/Library/Developer/CommandLineTools
+rtusrgp=$(groups $rtusr | cut -d' ' -f 1)
+xcgui=/Applications/Xcode.app
+osvers=$(sw_vers -productVersion)
 updtr=macports_updater.sh
 
 # Check for and change to MacPorts dir:
@@ -49,7 +50,9 @@ rm -rf /Library/Developer/CommandLineTools
 echo "Installing the latest version of Xcode CLI tools..."
 xcode-select --install
 read -p "Press any key to resume after Xcode CLI tools installation completes."
-xcodebuild -license
+if [ -d $xcgui ]; then
+	xcodebuild -license
+fi
 echo "Done."
 
 # Reinstall MacPorts base system:
@@ -107,6 +110,7 @@ case $osvers in
         read -p "Press any key to exit..."
         exit
         ;;
+esac
 
 # Uninstall your old ports:
 echo "Uninstalling your old ports..."
