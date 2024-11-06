@@ -46,7 +46,6 @@ fi
 # Install the latest version of the Xcode command-line tools:
 echo "Removing existing Xcode CLI tools..."
 rm -rf /Library/Developer/CommandLineTools
-
 echo "Installing the latest version of Xcode CLI tools..."
 xcode-select --install
 read -p "Press any key to resume after Xcode CLI tools installation completes."
@@ -60,7 +59,7 @@ case $osvers in
     15*)
         echo "Installing the MacPorts base system for Sequoia..."
         curl --location --remote-name https://github.com/macports/macports-base/releases/download/v2.10.4/MacPorts-2.10.4-15-Sequoia.pkg
-        sudo installer -pkg MacPorts-2.10.4-15-Sequoia.pkg /
+        sudo installer -pkg MacPorts-2.10.4-15-Sequoia.pkg -target /
         echo "Done."
         ;;
     14*)
