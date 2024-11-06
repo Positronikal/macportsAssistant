@@ -32,7 +32,9 @@ updtr=macports_updater.sh
 
 # Create MacPorts dir and set ~/bin path envar:
 echo "Preparing your MacPorts directory..."
-mkdir -p /Users/$rtusr/bin/MacPorts
+if [ ! -d /Users/$rtusr/bin/MacPorts ]; then
+    mkdir -p /Users/$rtusr/bin/MacPorts
+fi
 cd /Users/$rtusr/bin/MacPorts
 PATH="/Users/$rtusr/bin/MacPorts${PATH:+:$PATH}"
 echo "Changed working directory to: /Users/$rtusr/bin/MacPorts"
@@ -40,7 +42,6 @@ echo "Changed working directory to: /Users/$rtusr/bin/MacPorts"
 # Install the latest version of the Xcode command-line tools:
 echo "Removing existing Xcode CLI tools..."
 rm -rf /Library/Developer/CommandLineTools
-
 echo "Installing the latest version of Xcode CLI tools..."
 xcode-select --install
 read -p "Press any key to resume after Xcode CLI tools installation completes."
@@ -51,6 +52,12 @@ echo "Done."
 
 # Install MacPorts base system:
 case $osvers in
+    15*)
+        echo "Installing the MacPorts base system for Sequoia..."
+        curl --location --remote-name https://github.com/macports/macports-base/releases/download/v2.10.4/MacPorts-2.10.4-15-Sequoia.pkg
+        sudo installer -pkg MacPorts-2.10.4-15-Sequoia.pkg /
+        echo "Done."
+        ;;
     14*)
         echo "Installing the MacPorts base system for Sonoma..."
         curl --location --remote-name https://github.com/macports/macports-base/releases/download/v2.8.1/MacPorts-2.8.1-14-Sonoma.pkg

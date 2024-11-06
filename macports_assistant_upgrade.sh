@@ -57,6 +57,12 @@ echo "Done."
 
 # Reinstall MacPorts base system:
 case $osvers in
+    15*)
+        echo "Installing the MacPorts base system for Sequoia..."
+        curl --location --remote-name https://github.com/macports/macports-base/releases/download/v2.10.4/MacPorts-2.10.4-15-Sequoia.pkg
+        sudo installer -pkg MacPorts-2.10.4-15-Sequoia.pkg /
+        echo "Done."
+        ;;
     14*)
         echo "Installing the MacPorts base system for Sonoma..."
         curl --location --remote-name https://github.com/macports/macports-base/releases/download/v2.8.1/MacPorts-2.8.1-14-Sonoma.pkg
