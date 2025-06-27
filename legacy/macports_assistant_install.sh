@@ -3,7 +3,7 @@
 # macports_assistant_install.sh
 # Hoyt Harness, 2023
 #
-# A shell script for macOS 10.14 thru 14 to automate the installation
+# A shell script for macOS 10.12 thru 15 to automate the installation
 # of MacPorts.
 #
 # Copyright (C) 2023 Hoyt Harness, hoyt.harness@gmail.com, Positronikal
@@ -27,7 +27,7 @@
 rtusr=$(logname 2>/dev/null || echo $SUDO_USER)
 rtusrgp=$(groups $rtusr | cut -d' ' -f 1)
 xcgui=/Applications/Xcode.app
-osvers=$(system_profiler SPSoftwareDataType | grep "System Version" | awk '{print $6}')
+osvers=$(sw_vers -productVersion)
 updtr=macports_updater.sh
 
 # Create MacPorts dir and set ~/bin path envar:
@@ -60,20 +60,20 @@ case $osvers in
         ;;
     14*)
         echo "Installing the MacPorts base system for Sonoma..."
-        curl --location --remote-name https://github.com/macports/macports-base/releases/download/v2.8.1/MacPorts-2.8.1-14-Sonoma.pkg
-        sudo installer -pkg MacPorts-2.8.1-14-Sonoma.pkg -target /
+        curl --location --remote-name https://github.com/macports/macports-base/releases/download/v2.10.4/MacPorts-2.10.4-14-Sonoma.pkg
+        sudo installer -pkg MacPorts-2.10.4-14-Sonoma.pkg -target /
         echo "Done."
         ;;
     13*)
         echo "Installing the MacPorts base system for Ventura..."
-        curl --location --remote-name https://github.com/macports/macports-base/releases/download/v2.8.1/MacPorts-2.8.1-13-Ventura.pkg
-        sudo installer -pkg MacPorts-2.8.1-13-Ventura.pkg -target /
+        curl --location --remote-name https://github.com/macports/macports-base/releases/download/v2.10.4/MacPorts-2.10.4-13-Ventura.pkg
+        sudo installer -pkg MacPorts-2.10.4-13-Ventura.pkg -target /
         echo "Done."
         ;;
     12*)
         echo "Installing the MacPorts base system for Monterey..."
-        curl --location --remote-name https://github.com/macports/macports-base/releases/download/v2.8.1/MacPorts-2.8.1-12-Monterey.pkg
-        sudo installer -pkg MacPorts-2.8.1-12-Monterey.pkg -target /
+        curl --location --remote-name https://github.com/macports/macports-base/releases/download/v2.10.4/MacPorts-2.10.4-12-Monterey.pkg
+        sudo installer -pkg MacPorts-2.10.4-12-Monterey.pkg -target /
         echo "Done."
         ;;
     11*)
@@ -123,7 +123,7 @@ sudo port unsetrequested installed
 xargs sudo port setrequested < requested.txt
 echo "Done."
 
-Echo "Setting up MacPorts update script..."
+echo "Setting up MacPorts update script..."
 cd ..
 touch $updtr
 chown $rtusr:$rtusrgp $updtr
@@ -150,7 +150,7 @@ echo "# GNU General Public License for more details." >> $updtr
 echo "#" >> $updtr
 echo "# You should have received a copy of the GNU General Public License" >> $updtr
 echo "# along with this program.  If not, see <http://www.gnu.org/licenses/>." >> $updtr
-echo >> $updtr >> $updtr
+echo >> $updtr
 echo "sudo port -v selfupdate" >> $updtr
 echo "sudo port upgrade outdated" >> $updtr
 echo "sudo port uninstall inactive" >> $updtr

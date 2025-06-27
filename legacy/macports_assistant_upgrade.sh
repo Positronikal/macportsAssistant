@@ -3,7 +3,7 @@
 # macports_assistant_upgrade.sh
 # Hoyt Harness, 2023
 #
-# A shell script for macOS 13 Ventura and later to upgrade an existing
+# A shell script for macOS 10.12 and later to upgrade an existing
 # MacPorts installation for a previous version of macOS.
 #
 # Copyright (C) 2023 Hoyt Harness, hoyt.harness@gmail.com, Positronikal
@@ -64,20 +64,20 @@ case $osvers in
         ;;
     14*)
         echo "Installing the MacPorts base system for Sonoma..."
-        curl --location --remote-name https://github.com/macports/macports-base/releases/download/v2.8.1/MacPorts-2.8.1-14-Sonoma.pkg
-        sudo installer -pkg MacPorts-2.8.1-14-Sonoma.pkg -target /
+        curl --location --remote-name https://github.com/macports/macports-base/releases/download/v2.10.4/MacPorts-2.10.4-14-Sonoma.pkg
+        sudo installer -pkg MacPorts-2.10.4-14-Sonoma.pkg -target /
         echo "Done."
         ;;
     13*)
         echo "Installing the MacPorts base system for Ventura..."
-        curl --location --remote-name https://github.com/macports/macports-base/releases/download/v2.8.1/MacPorts-2.8.1-13-Ventura.pkg
-        sudo installer -pkg MacPorts-2.8.1-13-Ventura.pkg -target /
+        curl --location --remote-name https://github.com/macports/macports-base/releases/download/v2.10.4/MacPorts-2.10.4-13-Ventura.pkg
+        sudo installer -pkg MacPorts-2.10.4-13-Ventura.pkg -target /
         echo "Done."
         ;;
     12*)
         echo "Installing the MacPorts base system for Monterey..."
-        curl --location --remote-name https://github.com/macports/macports-base/releases/download/v2.8.1/MacPorts-2.8.1-12-Monterey.pkg
-        sudo installer -pkg MacPorts-2.8.1-12-Monterey.pkg -target /
+        curl --location --remote-name https://github.com/macports/macports-base/releases/download/v2.10.4/MacPorts-2.10.4-12-Monterey.pkg
+        sudo installer -pkg MacPorts-2.10.4-12-Monterey.pkg -target /
         echo "Done."
         ;;
     11*)
@@ -137,44 +137,46 @@ sudo port unsetrequested installed
 xargs sudo port setrequested < requested.txt
 echo "Done."
 
-Echo "Updating MacPorts update script..."
+echo "Updating MacPorts update script..."
 cd ..
+# Remove old updater script if it exists
 if [ -f $updtr ]; then
     rm -rf $updtr
-else
-    touch $updtr
-    chown $rtusr:$rtusrgp $updtr
-    chmod +x $updtr
-    echo "#! /bin/sh" > $updtr
-    echo >> $updtr
-    echo "# macports_updater.sh" >> $updtr
-    echo "# Hoyt Harness, Positronikal, 2023" >> $updtr
-    echo "#" >> $updtr
-    echo "# A shell script for macOS to update an existing MacPorts installation," >> $updtr
-    echo "# including ports." >> $updtr
-    echo "#" >> $updtr
-    echo "# Copyright (C) 2023 Hoyt Harness, hoyt.harness@gmail.com, Positronikal" >> $updtr
-    echo "#" >> $updtr
-    echo "# This program is free software: you can redistribute it and/or modify" >> $updtr
-    echo "# it under the terms of the GNU General Public License as published by" >> $updtr
-    echo "# the Free Software Foundation, either version 3 of the License, or" >> $updtr
-    echo "# (at your option) any later version." >> $updtr
-    echo "#" >> $updtr
-    echo "# This program is distributed in the hope that it will be useful," >> $updtr
-    echo "# but WITHOUT ANY WARRANTY; without even the implied warranty of" >> $updtr
-    echo "# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the" >> $updtr
-    echo "# GNU General Public License for more details." >> $updtr
-    echo "#" >> $updtr
-    echo "# You should have received a copy of the GNU General Public License" >> $updtr
-    echo "# along with this program.  If not, see <http://www.gnu.org/licenses/>." >> $updtr
-    echo >> $updtr >> $updtr
-    echo "sudo port -v selfupdate" >> $updtr
-    echo "sudo port upgrade outdated" >> $updtr
-    echo "sudo port uninstall inactive" >> $updtr
-    echo "sudo port uninstall rleaves" >> $updtr
-    echo >> $updtr
-    echo "exit" >> $updtr
 fi
+
+# Create new updater script
+touch $updtr
+chown $rtusr:$rtusrgp $updtr
+chmod +x $updtr
+echo "#! /bin/sh" > $updtr
+echo >> $updtr
+echo "# macports_updater.sh" >> $updtr
+echo "# Hoyt Harness, Positronikal, 2023" >> $updtr
+echo "#" >> $updtr
+echo "# A shell script for macOS to update an existing MacPorts installation," >> $updtr
+echo "# including ports." >> $updtr
+echo "#" >> $updtr
+echo "# Copyright (C) 2023 Hoyt Harness, hoyt.harness@gmail.com, Positronikal" >> $updtr
+echo "#" >> $updtr
+echo "# This program is free software: you can redistribute it and/or modify" >> $updtr
+echo "# it under the terms of the GNU General Public License as published by" >> $updtr
+echo "# the Free Software Foundation, either version 3 of the License, or" >> $updtr
+echo "# (at your option) any later version." >> $updtr
+echo "#" >> $updtr
+echo "# This program is distributed in the hope that it will be useful," >> $updtr
+echo "# but WITHOUT ANY WARRANTY; without even the implied warranty of" >> $updtr
+echo "# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the" >> $updtr
+echo "# GNU General Public License for more details." >> $updtr
+echo "#" >> $updtr
+echo "# You should have received a copy of the GNU General Public License" >> $updtr
+echo "# along with this program.  If not, see <http://www.gnu.org/licenses/>." >> $updtr
+echo >> $updtr
+echo "sudo port -v selfupdate" >> $updtr
+echo "sudo port upgrade outdated" >> $updtr
+echo "sudo port uninstall inactive" >> $updtr
+echo "sudo port uninstall rleaves" >> $updtr
+echo >> $updtr
+echo "exit" >> $updtr
     echo "New MacPorts update script created. Run macports_updater.sh as root from terminal."
 
 echo "MacPorts upgrade complete."
